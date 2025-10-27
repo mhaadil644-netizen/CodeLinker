@@ -23,6 +23,7 @@ export default function Home() {
   const [cartOpen, setCartOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
   // Fetch products
   const { data: products = [] } = useQuery<Product[]>({
@@ -137,6 +138,24 @@ export default function Home() {
     document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleAdminClick = () => {
+    if (!isAdminAuthenticated) {
+      const password = prompt("Enter admin password:");
+      if (password === "medparfum2024") {
+        setIsAdminAuthenticated(true);
+        setAdminOpen(true);
+      } else if (password !== null) {
+        toast({
+          title: "Access Denied",
+          description: "Incorrect password. Admin access is restricted.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      setAdminOpen(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -166,7 +185,7 @@ export default function Home() {
                 )}
               </button>
               <Button
-                onClick={() => setAdminOpen(true)}
+                onClick={handleAdminClick}
                 className="bg-med-sea hover:bg-med-sea/90 text-white"
                 data-testid="button-admin"
               >
