@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2, CreditCard, Banknote } from "lucide-react";
 import { CartItem } from "@shared/schema";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
 
 interface ShoppingCartModalProps {
   open: boolean;
@@ -23,20 +24,49 @@ export function ShoppingCartModal({
   onRemoveItem,
   onCheckout 
 }: ShoppingCartModalProps) {
+  const { toast } = useToast();
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(0);
+  const [appliedCode, setAppliedCode] = useState("");
 
   const subtotal = items.reduce((sum, item) => sum + (item.pricePerUnit * item.quantity), 0);
   const discount = subtotal * (appliedDiscount / 100);
   const total = subtotal - discount;
 
-  const handleApplyDiscount = () => {
-    if (discountCode.toUpperCase() === "WELCOME10") {
-      setAppliedDiscount(10);
-    } else if (discountCode.toUpperCase() === "SUMMER20") {
-      setAppliedDiscount(20);
-    } else {
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) {
       setAppliedDiscount(0);
+      setAppliedCode("");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/discount/${discountCode.trim()}`);
+      if (response.ok) {
+        const data = await response.json();
+        setAppliedDiscount(data.percentage);
+        setAppliedCode(discountCode.trim());
+        toast({
+          title: "Discount Applied!",
+          description: `${data.percentage}% discount has been applied to your order.`,
+        });
+      } else {
+        setAppliedDiscount(0);
+        setAppliedCode("");
+        toast({
+          title: "Invalid Code",
+          description: "The discount code you entered is not valid.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      setAppliedDiscount(0);
+      setAppliedCode("");
+      toast({
+        title: "Error",
+        description: "Failed to apply discount code. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -143,7 +173,7 @@ export function ShoppingCartModal({
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <Button
                     size="lg"
-                    onClick={() => onCheckout('online', appliedDiscount > 0 ? discountCode : undefined)}
+                    onClick={() => onCheckout('online', appliedCode || undefined)}
                     className="bg-med-gold hover:bg-med-gold/90 text-white"
                     data-testid="button-checkout-online"
                   >
@@ -152,7 +182,7 @@ export function ShoppingCartModal({
                   </Button>
                   <Button
                     size="lg"
-                    onClick={() => onCheckout('cod', appliedDiscount > 0 ? discountCode : undefined)}
+                    onClick={() => onCheckout('cod', appliedCode || undefined)}
                     className="bg-med-sea hover:bg-med-sea/90 text-white"
                     data-testid="button-checkout-cod"
                   >
