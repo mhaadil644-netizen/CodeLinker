@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MED Parfum - The Art of Scent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'med-gold': '#D4AF37',
+                        'med-sand': '#F5E6D3',
+                        'med-sea': '#2C5F7C',
+                        'med-cream': '#FAF7F0'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .perfume-card {
+            transition: all 0.3s ease;
+        }
+        
+        .perfume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+        
+        .bottle-glow:hover {
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #FAF7F0 0%, #F5E6D3 50%, #E8D5B7 100%);
+        }
+        
+        .admin-panel {
+            background: linear-gradient(135deg, #2C5F7C 0%, #1E4A5F 100%);
+        }
+    </style>
+</head>
+<body class="font-sans bg-med-cream">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="font-serif text-2xl font-bold text-med-sea">MED Parfum</h1>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-med-gold transition-colors">Home</a>
+                    <a href="#collection" class="text-gray-700 hover:text-med-gold transition-colors">Collection</a>
+                    <a href="#about" class="text-gray-700 hover:text-med-gold transition-colors">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-med-gold transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleLanguage()" class="text-sm text-gray-600 hover:text-med-gold">EN | FR | AR</button>
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-700 hover:text-med-gold">
+                        🛒 <span id="cartCount" class="absolute -top-1 -right-1 bg-med-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleAdmin()" class="bg-med-sea text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">Admin</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <h2 class="font-serif text-5xl md:text-6xl font-bold text-med-sea mb-6">
+                        The Art of Scent
+                    </h2>
+                    <p class="text-xl text-gray-700 mb-8 leading-relaxed">
+                        Discover timeless fragrances inspired by the Mediterranean. Choose your perfume, select your bottle size (starting from 10ml), and enjoy the freedom to pay your way — online or cash on delivery.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-10">
+                        Indulge in a luxurious shopping experience designed for perfume lovers who value elegance, quality, and personalization.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="scrollToCollection()" class="bg-med-gold text-white px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all transform hover:scale-105">
+                            Shop Now
+                        </button>
+                        <button onclick="scrollToCollection()" class="border-2 border-med-gold text-med-gold px-8 py-3 rounded-lg font-semibold hover:bg-med-gold hover:text-white transition-all">
+                            Discover the Collection
+                        </button>
+                        <button onclick="showGiftOptions()" class="bg-med-sea text-white px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                            Gift a Perfume
+                        </button>
+                        <button onclick="showCustomSet()" class="border-2 border-med-sea text-med-sea px-8 py-3 rounded-lg font-semibold hover:bg-med-sea hover:text-white transition-all">
+                            Create Your Set
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="bottle-glow inline-block">
+                        <svg width="300" height="400" viewBox="0 0 300 400" class="mx-auto">
+                            <!-- Perfume Bottle SVG -->
+                            <defs>
+                                <linearGradient id="bottleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#F5E6D3"/>
+                                    <stop offset="50%" style="stop-color:#D4AF37"/>
+                                    <stop offset="100%" style="stop-color:#B8860B"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Bottle body -->
+                            <rect x="100" y="150" width="100" height="200" rx="10" fill="url(#bottleGradient)" opacity="0.9"/>
+                            <!-- Bottle neck -->
+                            <rect x="130" y="100" width="40" height="60" fill="url(#bottleGradient)" opacity="0.9"/>
+                            <!-- Cap -->
+                            <rect x="125" y="80" width="50" height="30" rx="5" fill="#2C5F7C"/>
+                            <!-- Label -->
+                            <rect x="110" y="200" width="80" height="60" rx="5" fill="white" opacity="0.8"/>
+                            <text x="150" y="220" text-anchor="middle" class="font-serif text-sm fill-med-sea">MED</text>
+                            <text x="150" y="240" text-anchor="middle" class="font-serif text-sm fill-med-sea">Parfum</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection Section -->
+    <section id="collection" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h3 class="font-serif text-4xl font-bold text-med-sea mb-4">Our Collection</h3>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Each fragrance tells a story of elegance and individuality, inspired by the Mediterranean essence.
+                </p>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button onclick="filterCategory('all')" class="category-filter active bg-med-gold text-white px-6 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all">
+                    All
+                </button>
+                <button onclick="filterCategory('floral')" class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-med-gold hover:text-white transition-all">
+                    Floral
+                </button>
+                <button onclick="filterCategory('oriental')" class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-med-gold hover:text-white transition-all">
+                    Oriental
+                </button>
+                <button onclick="filterCategory('woody')" class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-med-gold hover:text-white transition-all">
+                    Woody
+                </button>
+                <button onclick="filterCategory('fresh')" class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium hover:bg-med-gold hover:text-white transition-all">
+                    Fresh
+                </button>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-serif text-2xl font-bold text-med-sea">Shopping Cart</h3>
+                        <button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                    <div id="cartItems" class="space-y-4 mb-6">
+                        <!-- Cart items will be populated here -->
+                    </div>
+                    <div class="border-t pt-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-semibold text-lg">Total: </span>
+                            <span id="cartTotal" class="font-bold text-xl text-med-gold">$0.00</span>
+                        </div>
+                        <div class="space-y-3">
+                            <input type="text" id="discountCode" placeholder="Discount code" class="w-full p-3 border rounded-lg">
+                            <button onclick="applyDiscount()" class="w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                                Apply Discount
+                            </button>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="checkout('online')" class="bg-med-gold text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                                    💳 Pay Online
+                                </button>
+                                <button onclick="checkout('cod')" class="bg-med-sea text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                                    💵 Cash on Delivery
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
+                <div id="productModalContent" class="p-6">
+                    <!-- Product details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="admin-panel rounded-lg max-w-6xl w-full max-h-screen overflow-y-auto text-white">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-serif text-2xl font-bold">Admin Dashboard</h3>
+                        <button onclick="toggleAdmin()" class="text-white hover:text-gray-300 text-2xl">&times;</button>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">Total Sales</h4>
+                            <p class="text-2xl font-bold text-med-gold">$12,450</p>
+                        </div>
+                        <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">Orders Today</h4>
+                            <p class="text-2xl font-bold text-med-gold">23</p>
+                        </div>
+                        <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">Products</h4>
+                            <p class="text-2xl font-bold text-med-gold" id="productCount">6</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white bg-opacity-10 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg mb-4">Add New Product</h4>
+                            <form id="addProductForm" class="space-y-4">
+                                <input type="text" id="productName" placeholder="Product Name" class="w-full p-3 rounded-lg text-gray-800" required>
+                                <select id="productCategory" class="w-full p-3 rounded-lg text-gray-800" required>
+                                    <option value="">Select Category</option>
+                                    <option value="floral">Floral</option>
+                                    <option value="oriental">Oriental</option>
+                                    <option value="woody">Woody</option>
+                                    <option value="fresh">Fresh</option>
+                                </select>
+                                <input type="text" id="productTop" placeholder="Top Notes" class="w-full p-3 rounded-lg text-gray-800" required>
+                                <input type="text" id="productHeart" placeholder="Heart Notes" class="w-full p-3 rounded-lg text-gray-800" required>
+                                <input type="text" id="productBase" placeholder="Base Notes" class="w-full p-3 rounded-lg text-gray-800" required>
+                                <input type="number" id="productPrice" placeholder="Price (10ml)" class="w-full p-3 rounded-lg text-gray-800" required>
+                                <select id="productGender" class="w-full p-3 rounded-lg text-gray-800" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="men">Men</option>
+                                    <option value="women">Women</option>
+                                    <option value="unisex">Unisex</option>
+                                </select>
+                                <textarea id="productDescription" placeholder="Description" class="w-full p-3 rounded-lg text-gray-800 h-24" required></textarea>
+                                <button type="submit" class="w-full bg-med-gold text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                                    Add Product
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="bg-white bg-opacity-10 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg mb-4">Recent Orders</h4>
+                            <div class="space-y-3">
+                                <div class="bg-white bg-opacity-10 p-3 rounded">
+                                    <div class="flex justify-between items-center">
+                                        <span>#ORD001 - Mediterranean Breeze</span>
+                                        <span class="text-med-gold">$45</span>
+                                    </div>
+                                    <div class="text-sm text-gray-300">Online Payment - Delivered</div>
+                                </div>
+                                <div class="bg-white bg-opacity-10 p-3 rounded">
+                                    <div class="flex justify-between items-center">
+                                        <span>#ORD002 - Golden Sunset</span>
+                                        <span class="text-med-gold">$32</span>
+                                    </div>
+                                    <div class="text-sm text-gray-300">Cash on Delivery - Pending</div>
+                                </div>
+                                <div class="bg-white bg-opacity-10 p-3 rounded">
+                                    <div class="flex justify-between items-center">
+                                        <span>#ORD003 - Ocean Mist</span>
+                                        <span class="text-med-gold">$28</span>
+                                    </div>
+                                    <div class="text-sm text-gray-300">Online Payment - Shipped</div>
+                                </div>
+                            </div>
+                            <button class="w-full mt-4 bg-med-sea text-white py-2 rounded-lg hover:bg-opacity-90 transition-all">
+                                View All Orders
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-med-sand">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h3 class="font-serif text-4xl font-bold text-med-sea mb-8">About MED Parfum</h3>
+                <p class="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+                    At MED Parfum, we believe scent is emotion — a story you wear. Our fragrances are inspired by the timeless beauty of the Mediterranean, where luxury meets authenticity. Each bottle captures the essence of golden sunsets, azure seas, and warm Mediterranean breezes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h3 class="font-serif text-4xl font-bold text-med-sea mb-4">Get in Touch</h3>
+                <p class="text-xl text-gray-600">We're here to help you find your perfect scent</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="font-semibold text-xl mb-4">Contact Information</h4>
+                    <div class="space-y-3">
+                        <p class="flex items-center"><span class="mr-3">📧</span> info@medparfum.com</p>
+                        <p class="flex items-center"><span class="mr-3">📱</span> +1 (555) 123-4567</p>
+                        <p class="flex items-center"><span class="mr-3">📍</span> Mediterranean Coast</p>
+                        <p class="flex items-center"><span class="mr-3">💬</span> 
+                            <a href="#" class="text-med-gold hover:underline">WhatsApp Support</a>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <form class="space-y-4">
+                        <input type="text" placeholder="Your Name" class="w-full p-3 border rounded-lg">
+                        <input type="email" placeholder="Your Email" class="w-full p-3 border rounded-lg">
+                        <textarea placeholder="Your Message" class="w-full p-3 border rounded-lg h-32"></textarea>
+                        <button type="submit" class="w-full bg-med-gold text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-med-sea text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-serif text-xl font-bold mb-4">MED Parfum</h4>
+                    <p class="text-gray-300">The Art of Scent - Mediterranean luxury fragrances</p>
+                </div>
+                <div>
+                    <h5 class="font-semibold mb-4">Quick Links</h5>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#home" class="hover:text-med-gold transition-colors">Home</a></li>
+                        <li><a href="#collection" class="hover:text-med-gold transition-colors">Collection</a></li>
+                        <li><a href="#about" class="hover:text-med-gold transition-colors">About</a></li>
+                        <li><a href="#contact" class="hover:text-med-gold transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-semibold mb-4">Customer Care</h5>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-med-gold transition-colors">Shipping Info</a></li>
+                        <li><a href="#" class="hover:text-med-gold transition-colors">Returns</a></li>
+                        <li><a href="#" class="hover:text-med-gold transition-colors">Size Guide</a></li>
+                        <li><a href="#" class="hover:text-med-gold transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-semibold mb-4">Follow Us</h5>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-med-gold transition-colors">📘</a>
+                        <a href="#" class="text-gray-300 hover:text-med-gold transition-colors">📷</a>
+                        <a href="#" class="text-gray-300 hover:text-med-gold transition-colors">🐦</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-600 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 MED Parfum. All rights reserved. | "At MED Parfum, we believe scent is emotion — a story you wear. Choose your fragrance, define your moment."</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample product data
+        let products = [
+            {
+                id: 1,
+                name: "Mediterranean Breeze",
+                category: "fresh",
+                type: "Eau de Parfum",
+                top: "Bergamot, Lemon, Sea Salt",
+                heart: "Lavender, Rosemary, Jasmine",
+                base: "Cedar, Ambergris, Musk",
+                longevity: "6-8 hours",
+                projection: "Moderate",
+                gender: "unisex",
+                price: 25,
+                description: "A refreshing coastal escape in a bottle",
+                story: "Inspired by the gentle Mediterranean breeze that carries the scent of wild herbs and sea spray across ancient coastal towns."
+            },
+            {
+                id: 2,
+                name: "Golden Sunset",
+                category: "oriental",
+                type: "Extrait de Parfum",
+                top: "Orange Blossom, Saffron, Pink Pepper",
+                heart: "Rose, Oud, Cinnamon",
+                base: "Vanilla, Sandalwood, Amber",
+                longevity: "8-12 hours",
+                projection: "Strong",
+                gender: "women",
+                price: 35,
+                description: "Warm and luxurious like a Mediterranean sunset",
+                story: "Captures the magical moment when the Mediterranean sun sets, painting the sky in golden hues while warm spices dance in the evening air."
+            },
+            {
+                id: 3,
+                name: "Ocean Mist",
+                category: "fresh",
+                type: "Eau de Parfum",
+                top: "Marine Accord, Mint, Grapefruit",
+                heart: "Water Lily, Cyclamen, Freesia",
+                base: "Driftwood, White Musk, Algae",
+                longevity: "5-7 hours",
+                projection: "Soft",
+                gender: "unisex",
+                price: 28,
+                description: "Fresh aquatic fragrance with marine notes",
+                story: "Evokes the pristine waters of hidden Mediterranean coves, where crystal-clear seas meet ancient limestone cliffs."
+            },
+            {
+                id: 4,
+                name: "Olive Grove",
+                category: "woody",
+                type: "Eau de Parfum",
+                top: "Green Leaves, Petitgrain, Lemon",
+                heart: "Olive Blossom, Fig, Thyme",
+                base: "Olive Wood, Vetiver, Moss",
+                longevity: "7-9 hours",
+                projection: "Moderate",
+                gender: "men",
+                price: 32,
+                description: "Earthy and green with Mediterranean herbs",
+                story: "A walk through ancient olive groves where silver-green leaves shimmer in the Mediterranean sun and the earth tells stories of centuries past."
+            },
+            {
+                id: 5,
+                name: "Rose Garden",
+                category: "floral",
+                type: "Eau de Parfum",
+                top: "Damask Rose, Peony, Bergamot",
+                heart: "Turkish Rose, Geranium, Violet",
+                base: "White Musk, Sandalwood, Powdery Notes",
+                longevity: "6-8 hours",
+                projection: "Moderate",
+                gender: "women",
+                price: 30,
+                description: "Elegant floral bouquet with Mediterranean roses",
+                story: "Inspired by the terraced rose gardens of Mediterranean monasteries, where monks have cultivated the finest roses for centuries."
+            },
+            {
+                id: 6,
+                name: "Spiced Amber",
+                category: "oriental",
+                type: "Extrait de Parfum",
+                top: "Cardamom, Black Pepper, Bergamot",
+                heart: "Amber, Incense, Labdanum",
+                base: "Patchouli, Vanilla, Benzoin",
+                longevity: "10-12 hours",
+                projection: "Strong",
+                gender: "men",
+                price: 40,
+                description: "Rich and warm with exotic spices",
+                story: "Reminiscent of ancient spice routes that crossed the Mediterranean, carrying precious amber and exotic spices from distant lands."
+            }
+        ];
+
+        let cart = [];
+        let currentLanguage = 'en';
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCartCount();
+        });
+
+        // Render products
+        function renderProducts(filter = 'all') {
+            const grid = document.getElementById('productsGrid');
+            const filteredProducts = filter === 'all' ? products : products.filter(p => p.category === filter);
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="perfume-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <div class="text-center mb-4">
+                            <svg width="120" height="160" viewBox="0 0 120 160" class="mx-auto bottle-glow">
+                                <defs>
+                                    <linearGradient id="bottle${product.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#F5E6D3"/>
+                                        <stop offset="50%" style="stop-color:#D4AF37"/>
+                                        <stop offset="100%" style="stop-color:#B8860B"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect x="40" y="60" width="40" height="80" rx="4" fill="url(#bottle${product.id})" opacity="0.9"/>
+                                <rect x="52" y="40" width="16" height="24" fill="url(#bottle${product.id})" opacity="0.9"/>
+                                <rect x="50" y="32" width="20" height="12" rx="2" fill="#2C5F7C"/>
+                                <rect x="44" y="80" width="32" height="24" rx="2" fill="white" opacity="0.8"/>
+                                <text x="60" y="88" text-anchor="middle" class="text-xs fill-med-sea">MED</text>
+                                <text x="60" y="98" text-anchor="middle" class="text-xs fill-med-sea">Parfum</text>
+                            </svg>
+                        </div>
+                        <h4 class="font-serif text-xl font-bold text-med-sea mb-2">${product.name}</h4>
+                        <p class="text-sm text-gray-600 mb-2">${product.type} • ${product.gender.charAt(0).toUpperCase() + product.gender.slice(1)}</p>
+                        <p class="text-gray-700 mb-4">${product.description}</p>
+                        <div class="text-sm text-gray-600 mb-4">
+                            <p><strong>Top:</strong> ${product.top}</p>
+                            <p><strong>Heart:</strong> ${product.heart}</p>
+                            <p><strong>Base:</strong> ${product.base}</p>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-bold text-med-gold">From $${product.price}</span>
+                            <span class="text-sm text-gray-500">${product.longevity}</span>
+                        </div>
+                        <div class="space-y-2">
+                            <button onclick="showProductDetail(${product.id})" class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                View Details
+                            </button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="addToCart(${product.id}, 10)" class="bg-med-gold text-white py-2 rounded-lg hover:bg-opacity-90 transition-all text-sm">
+                                    🛒 Add 10ml
+                                </button>
+                                <button onclick="showProductDetail(${product.id})" class="bg-med-sea text-white py-2 rounded-lg hover:bg-opacity-90 transition-all text-sm">
+                                    🎁 Gift This
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter products by category
+        function filterCategory(category) {
+            // Update active filter button
+            document.querySelectorAll('.category-filter').forEach(btn => {
+                btn.classList.remove('active', 'bg-med-gold', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            event.target.classList.add('active', 'bg-med-gold', 'text-white');
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            
+            renderProducts(category);
+        }
+
+        // Show product detail modal
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('productModal');
+            const content = document.getElementById('productModalContent');
+            
+            content.innerHTML = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-serif text-3xl font-bold text-med-sea">${product.name}</h3>
+                    <button onclick="closeProductModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="text-center">
+                        <svg width="200" height="280" viewBox="0 0 200 280" class="mx-auto bottle-glow">
+                            <defs>
+                                <linearGradient id="detailBottle${product.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#F5E6D3"/>
+                                    <stop offset="50%" style="stop-color:#D4AF37"/>
+                                    <stop offset="100%" style="stop-color:#B8860B"/>
+                                </linearGradient>
+                            </defs>
+                            <rect x="60" y="100" width="80" height="140" rx="8" fill="url(#detailBottle${product.id})" opacity="0.9"/>
+                            <rect x="85" y="60" width="30" height="50" fill="url(#detailBottle${product.id})" opacity="0.9"/>
+                            <rect x="80" y="40" width="40" height="25" rx="4" fill="#2C5F7C"/>
+                            <rect x="70" y="140" width="60" height="40" rx="4" fill="white" opacity="0.8"/>
+                            <text x="100" y="155" text-anchor="middle" class="text-sm fill-med-sea">MED</text>
+                            <text x="100" y="170" text-anchor="middle" class="text-sm fill-med-sea">Parfum</text>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="mb-6">
+                            <p class="text-lg text-gray-600 mb-2">${product.type} • ${product.gender.charAt(0).toUpperCase() + product.gender.slice(1)}</p>
+                            <p class="text-xl text-gray-700 mb-4">${product.description}</p>
+                            <p class="text-gray-600 leading-relaxed">${product.story}</p>
+                        </div>
+                        
+                        <div class="bg-med-sand p-4 rounded-lg mb-6">
+                            <h4 class="font-semibold text-med-sea mb-3">Fragrance Pyramid</h4>
+                            <div class="space-y-2">
+                                <p><strong>Top Notes:</strong> ${product.top}</p>
+                                <p><strong>Heart Notes:</strong> ${product.heart}</p>
+                                <p><strong>Base Notes:</strong> ${product.base}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="text-center">
+                                <p class="font-semibold text-med-sea">Longevity</p>
+                                <p class="text-gray-600">${product.longevity}</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-semibold text-med-sea">Projection</p>
+                                <p class="text-gray-600">${product.projection}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-med-sea mb-3">Select Size</h4>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button onclick="selectSize(${product.id}, 10, ${product.price})" class="size-btn border-2 border-med-gold text-med-gold p-2 rounded text-sm hover:bg-med-gold hover:text-white transition-all">
+                                    10ml<br>$${product.price}
+                                </button>
+                                <button onclick="selectSize(${product.id}, 20, ${Math.round(product.price * 1.8)})" class="size-btn border-2 border-gray-300 text-gray-600 p-2 rounded text-sm hover:border-med-gold hover:text-med-gold transition-all">
+                                    20ml<br>$${Math.round(product.price * 1.8)}
+                                </button>
+                                <button onclick="selectSize(${product.id}, 50, ${Math.round(product.price * 4)})" class="size-btn border-2 border-gray-300 text-gray-600 p-2 rounded text-sm hover:border-med-gold hover:text-med-gold transition-all">
+                                    50ml<br>$${Math.round(product.price * 4)}
+                                </button>
+                                <button onclick="selectSize(${product.id}, 100, ${Math.round(product.price * 7)})" class="size-btn border-2 border-gray-300 text-gray-600 p-2 rounded text-sm hover:border-med-gold hover:text-med-gold transition-all">
+                                    100ml<br>$${Math.round(product.price * 7)}
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <button onclick="addToCartFromModal(${product.id})" class="w-full bg-med-gold text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                                🛒 Add to Cart
+                            </button>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="buyNow(${product.id}, 'online')" class="bg-med-sea text-white py-2 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                                    💳 Pay Online
+                                </button>
+                                <button onclick="buyNow(${product.id}, 'cod')" class="bg-gray-600 text-white py-2 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                                    💵 Cash on Delivery
+                                </button>
+                            </div>
+                            <button onclick="giftProduct(${product.id})" class="w-full border-2 border-med-gold text-med-gold py-2 rounded-lg font-semibold hover:bg-med-gold hover:text-white transition-all">
+                                🎁 Gift This Item
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // Close product modal
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        // Select size in product modal
+        let selectedSize = 10;
+        let selectedPrice = 0;
+
+        function selectSize(productId, size, price) {
+            selectedSize = size;
+            selectedPrice = price;
+            
+            // Update button styles
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('border-med-gold', 'text-med-gold', 'bg-med-gold', 'text-white');
+                btn.classList.add('border-gray-300', 'text-gray-600');
+            });
+            
+            event.target.classList.remove('border-gray-300', 'text-gray-600');
+            event.target.classList.add('border-med-gold', 'text-med-gold');
+        }
+
+        // Add to cart
+        function addToCart(productId, size = 10) {
+            const product = products.find(p => p.id === productId);
+            const price = size === 10 ? product.price : 
+                        size === 20 ? Math.round(product.price * 1.8) :
+                        size === 50 ? Math.round(product.price * 4) :
+                        Math.round(product.price * 7);
+            
+            const existingItem = cart.find(item => item.productId === productId && item.size === size);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    productId,
+                    name: product.name,
+                    size,
+                    price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            showNotification(`${product.name} (${size}ml) added to cart!`);
+        }
+
+        // Add to cart from modal
+        function addToCartFromModal(productId) {
+            addToCart(productId, selectedSize);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Toggle cart modal
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('hidden');
+            
+            if (!modal.classList.contains('hidden')) {
+                renderCartItems();
+            }
+        }
+
+        // Render cart items
+        function renderCartItems() {
+            const container = document.getElementById('cartItems');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Your cart is empty</p>';
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between p-4 border rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-sm text-gray-600">${item.size}ml - $${item.price}</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="updateQuantity(${item.productId}, ${item.size}, -1)" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300">-</button>
+                            <span class="font-semibold">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.productId}, ${item.size}, 1)" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300">+</button>
+                            <button onclick="removeFromCart(${item.productId}, ${item.size})" class="text-red-500 hover:text-red-700 ml-2">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Update quantity
+        function updateQuantity(productId, size, change) {
+            const item = cart.find(item => item.productId === productId && item.size === size);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId, size);
+                } else {
+                    updateCartCount();
+                    renderCartItems();
+                }
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(productId, size) {
+            cart = cart.filter(item => !(item.productId === productId && item.size === size));
+            updateCartCount();
+            renderCartItems();
+        }
+
+        // Apply discount
+        function applyDiscount() {
+            const code = document.getElementById('discountCode').value.toUpperCase();
+            const validCodes = {
+                'WELCOME10': 0.1,
+                'MED20': 0.2,
+                'FIRST15': 0.15
+            };
+            
+            if (validCodes[code]) {
+                const discount = validCodes[code];
+                showNotification(`Discount applied: ${Math.round(discount * 100)}% off!`);
+                // Apply discount logic here
+            } else {
+                showNotification('Invalid discount code', 'error');
+            }
+        }
+
+        // Checkout
+        function checkout(paymentMethod) {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!', 'error');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const orderNumber = 'ORD' + Date.now().toString().slice(-6);
+            
+            if (paymentMethod === 'online') {
+                showNotification(`Redirecting to secure payment... Order #${orderNumber} - Total: $${total.toFixed(2)}`);
+                // Simulate payment processing
+                setTimeout(() => {
+                    cart = [];
+                    updateCartCount();
+                    toggleCart();
+                    showNotification('Payment successful! Order confirmed.', 'success');
+                }, 2000);
+            } else {
+                showNotification(`Order placed! Order #${orderNumber} - Total: $${total.toFixed(2)} - Cash on Delivery`, 'success');
+                cart = [];
+                updateCartCount();
+                toggleCart();
+            }
+        }
+
+        // Buy now
+        function buyNow(productId, paymentMethod) {
+            addToCartFromModal(productId);
+            closeProductModal();
+            setTimeout(() => {
+                toggleCart();
+                setTimeout(() => checkout(paymentMethod), 500);
+            }, 300);
+        }
+
+        // Gift product
+        function giftProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            showNotification(`Gift option for ${product.name} - Feature coming soon!`);
+        }
+
+        // Show gift options
+        function showGiftOptions() {
+            showNotification('Gift options - Choose any perfume and we\'ll add beautiful gift wrapping!');
+        }
+
+        // Show custom set
+        function showCustomSet() {
+            showNotification('Create Your Set - Mix and match 3 x 10ml bottles for a special price!');
+        }
+
+        // Toggle admin panel
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        // Add product (admin)
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newProduct = {
+                id: products.length + 1,
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                type: "Eau de Parfum",
+                top: document.getElementById('productTop').value,
+                heart: document.getElementById('productHeart').value,
+                base: document.getElementById('productBase').value,
+                longevity: "6-8 hours",
+                projection: "Moderate",
+                gender: document.getElementById('productGender').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                description: document.getElementById('productDescription').value,
+                story: "A new addition to our Mediterranean collection."
+            };
+            
+            products.push(newProduct);
+            renderProducts();
+            document.getElementById('productCount').textContent = products.length;
+            document.getElementById('addProductForm').reset();
+            showNotification('Product added successfully!', 'success');
+        });
+
+        // Utility functions
+        function scrollToCollection() {
+            document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleLanguage() {
+            const languages = ['EN', 'FR', 'AR'];
+            const current = event.target.textContent.split(' | ')[0];
+            const currentIndex = languages.indexOf(current);
+            const nextIndex = (currentIndex + 1) % languages.length;
+            event.target.textContent = languages.join(' | ');
+            showNotification(`Language switched to ${languages[nextIndex]}`);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg text-white font-semibold transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-med-gold'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995507d9d594e3cd',t:'MTc2MTU5Nzg1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
